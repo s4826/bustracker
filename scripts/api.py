@@ -4,11 +4,7 @@ import json
 import requests
 import gtfs_realtime_pb2
 
-# urls
-JSON_API_PREFIX = "https://api-v3.mbta.com/"
-PB_API_PREFIX = "https://cdn.mbta.com/realtime/"
-VEHICLE_POSITIONS = PB_API_PREFIX + "VehiclePositions.pb"
-TRIP_UPDATES = PB_API_PREFIX + "TripUpdates.pb"
+from config import JSON_API_PREFIX, PB_API_PREFIX, VEHICLE_POSITIONS, TRIP_UPDATES
 
 
 def build_json_request_url(request_type, filter_dict):
