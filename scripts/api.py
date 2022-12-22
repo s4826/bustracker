@@ -6,6 +6,31 @@ import gtfs_realtime_pb2
 
 from config import JSON_API_PREFIX, PB_API_PREFIX, VEHICLE_POSITIONS, TRIP_UPDATES
 
+class Cache(object):
+    """
+    Cache the results of a function call for a certain amount of time
+    """
+    def __init__(self, seconds=10):
+        """
+        Initialize a decorator instance
+
+        :param int seconds: return cached result for this many seconds
+        """
+        self.most_recent = time.time()
+        self.res = None
+        self.seconds = seconds
+
+    def __call__(self, func):
+        def wrapper():
+            if abs(time.time() - self.most_recent) < self.seconds and self.res is not None:
+                return self.res
+            else:
+                self.res = func()
+                self.most_recent = time.time()
+                return self.res
+        return wrapper
+
+
 def build_json_request_url(request_type, filter_dict, fields=None):
     url = JSON_API_PREFIX + request_type 
     url = add_filters(url, filter_dict)
@@ -52,6 +77,7 @@ def build_route_dict(route_id, direction_id):
 
 # protobuf api calls
 
+@Cache(seconds=20)
 def get_trip_updates():
     res = []
 
