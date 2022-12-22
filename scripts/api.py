@@ -6,11 +6,13 @@ import gtfs_realtime_pb2
 
 from config import JSON_API_PREFIX, PB_API_PREFIX, VEHICLE_POSITIONS, TRIP_UPDATES
 
-
-def build_json_request_url(request_type, filter_dict):
+def build_json_request_url(request_type, filter_dict, fields=None):
     url = JSON_API_PREFIX + request_type 
-    return add_filters(url, filter_dict)
-
+    url = add_filters(url, filter_dict)
+    if fields is not None:
+        field_filter = ",".join(fields)
+        url += f'&fields[{request_type[:-1]}]=' + field_filter
+    return url
 
 def add_filters(url, filter_dict):
     url += "?"
