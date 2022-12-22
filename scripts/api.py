@@ -52,23 +52,20 @@ def build_route_dict(route_id, direction_id):
 
 # protobuf api calls
 
-def get_trip_updates_by_route(route):
-    if type(route) != str:
-        route = str(route)
+def get_trip_updates():
     res = []
 
     feed = gtfs_realtime_pb2.FeedMessage()
     r = requests.get(TRIP_UPDATES)
     feed.ParseFromString(r.content)
     for entity in feed.entity:
-        if entity.trip_update.trip.route_id == route:
-            res.append(entity)
+        res.append(entity)
     return res
 
 
 def get_arrival_times(route_id, direction_id, stop_id):
     """
-    Get arrival times at all stops for a route/direction combination.
+    Get arrival times for a route/direction/stop combination.
     """
     res = []
 
@@ -76,9 +73,10 @@ def get_arrival_times(route_id, direction_id, stop_id):
     direction_id = int(direction_id)
     stop_id = str(stop_id)
 
-    updates = get_trip_updates_by_route(route_id)
+    updates = get_trip_updates()
     direction_updates = filter(lambda x: x.trip_update.trip.direction_id ==
-                               direction_id, updates)
+                               direction_id and x.trip_update.trip.route_id ==
+                               route_id, updates)
     for du in direction_updates:
         trip_id = du.trip_update.trip.trip_id
         for stop_time_update in du.trip_update.stop_time_update:
@@ -87,6 +85,7 @@ def get_arrival_times(route_id, direction_id, stop_id):
                     res.append(abs(stop_time_update.arrival.time -
                                         int(time.time())))
     return res
+
 
 def clock_time_difference(t1, t2):
     return sec_to_clock_time(abs(t1 - t2))
@@ -98,6 +97,7 @@ def sec_to_clock_time(seconds):
     s = (seconds - h*3600 - m*60)
     return f'{m:02}:{s:02}' if h== 0 \
             else f'{h}:{m:02}:{s:02}'
+
 
 if __name__ == "__main__":
     get_arrival_times(sys.argv[1], sys.argv[2])
