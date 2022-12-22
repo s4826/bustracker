@@ -26,18 +26,6 @@ def add_filters(url, filter_dict):
     return url[:-1]
 
 
-# JSON api calls
-
-def get_by_route(route_id):
-    r = requests.get(JSON_API_PREFIX + "routes/{}".format(route_id))
-    print(json.dumps(r.json(), indent=4))
-
-
-def get_by_stop_id(stop_id):
-    r = requests.get(JSON_API_PREFIX + "stops/{}".format(stop_id))
-    print(json.dumps(r.json(), indent=4))
-
-
 def get_stops_for_route(route_id, direction_id):
     filter_dict = {"route": route_id, "direction_id": direction_id}
     url = build_json_request_url("stops", filter_dict)
