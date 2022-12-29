@@ -1,0 +1,9 @@
+{% extends "choose_dir.html" %}
+{% block content %}
+{{ super() }}
+<div class=container>
+    {% for stop in route_stops %}
+        <li><a class="stop" id={{stop}} href="">{{ route_stops[stop] }}</a></li>
+    {% endfor %}
+</div>
+{% endblock %}
