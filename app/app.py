@@ -42,6 +42,16 @@ def index(route_id=None, direction=None, stop_id=None):
         return render_template('choose_route.html', route_form=g.route_form)
 
 
+@app.route('/routes/<route_id>/<direction>', methods = ['GET', 'POST'])
+def choose_stop(route_id, direction):
+    dir_id = directions[direction]
+    route_stops = api.build_route_dict(route_id, dir_id)
+    return render_template('choose_stop.html',
+                           route_form=g.route_form,
+                           direction_form=g.direction_form,
+                           route_stops=route_stops)
+
+
 @app.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
 def get_stop_predictions(route_id, direction, stop_id):
     dir_id = directions[direction]
