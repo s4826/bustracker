@@ -1,0 +1,15 @@
+{% extends "choose_dir.html" %}
+{% block content %}
+{{ super() }}
+<div class=container>
+{% for p in predictions %}
+    <p class="arrival_time" data-time={{p}}></p>
+{% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="/static/timer.js"></script>
+<script>populateSelections()</script>
+<script>timer()</script>
+{% endblock %}
