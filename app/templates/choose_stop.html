@@ -3,7 +3,11 @@
 {{ super() }}
 <div class=container>
     {% for stop in route_stops %}
-        <li><a class="stop" id={{stop}} href="">{{ route_stops[stop] }}</a></li>
+        <p><a class="stop" id={{stop}} href="">{{ route_stops[stop] }}</a></p>
     {% endfor %}
 </div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>createStopLinks()</script>
 {% endblock %}
