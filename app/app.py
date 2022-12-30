@@ -48,6 +48,15 @@ def index(route_id=None, direction=None, stop_id=None):
         return render_template('choose_route.html', route_form=g.route_form)
 
 
+@app.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
+def get_stop_predictions(route_id, direction, stop_id):
+    dir_id = 0 if direction == "Outbound" else 1
+    predictions = sorted(api.get_arrival_times(route_id, dir_id, stop_id))
+    return render_template('show_stop_times.html', route_form=g.route_form,
+                           direction_form=g.direction_form,
+                           predictions=predictions)
+
+
 @Cache(seconds=30)
 def create_route_form():
     route_form = RouteForm()
