@@ -15,13 +15,6 @@ def get_all_route_ids():
     return [route['id'] for route in r.json()['data']] 
     
 
-def get_stops_for_route(route_id, direction_id):
-    filter_dict = {"route": route_id, "direction_id": direction_id}
-    url = build_json_request_url("stops", filter_dict)
-    r = requests.get(url)
-    return r.json()['data']
-
-
 def build_route_dict(route_id, direction_id):
     """
     Create a dictionary object and populate it with all stops on
