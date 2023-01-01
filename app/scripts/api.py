@@ -4,50 +4,16 @@ import json
 import requests
 import gtfs_realtime_pb2
 
-from config import JSON_API_PREFIX, PB_API_PREFIX, VEHICLE_POSITIONS, TRIP_UPDATES
+from cache_decorator import Cache
 
-class Cache(object):
-    """
-    Cache the results of a function call for a certain amount of time
-    """
-    def __init__(self, seconds=10):
-        """
-        Initialize a decorator instance
+from constants import *
+from utils import *
 
-        :param int seconds: return cached result for this many seconds
-        """
-        self.most_recent = time.time()
-        self.res = None
-        self.seconds = seconds
-
-    def __call__(self, func):
-        def wrapper():
-            if abs(time.time() - self.most_recent) < self.seconds and self.res is not None:
-                return self.res
-            else:
-                self.res = func()
-                self.most_recent = time.time()
-                return self.res
-        return wrapper
-
-
-def build_json_request_url(request_type, filter_dict, fields=None):
-    url = JSON_API_PREFIX + request_type 
-    url = add_filters(url, filter_dict)
-    if fields is not None:
-        field_filter = ",".join(fields)
-        url += f'&fields[{request_type[:-1]}]=' + field_filter
-    return url
-
-def add_filters(url, filter_dict):
-    url += "?"
-    if 'sort' in filter_dict:
-        url += "sort={}&".format(filter_dict['sort'])
-    for key in filter_dict:
-        if 'sort' != key:
-            url += "filter[{}]={}&".format(key, filter_dict[key])
-    return url[:-1]
-
+def get_all_route_ids():
+    url = build_json_request_url("routes", fields=['id']) 
+    r = requests.get(url)
+    return [route['id'] for route in r.json()['data']] 
+    
 
 def get_stops_for_route(route_id, direction_id):
     filter_dict = {"route": route_id, "direction_id": direction_id}
@@ -77,7 +43,7 @@ def build_route_dict(route_id, direction_id):
 
 # protobuf api calls
 
-@Cache(seconds=20)
+@Cache(seconds=15)
 def get_trip_updates():
     res = []
 
@@ -111,18 +77,6 @@ def get_arrival_times(route_id, direction_id, stop_id):
                     res.append(abs(stop_time_update.arrival.time -
                                         int(time.time())))
     return res
-
-
-def clock_time_difference(t1, t2):
-    return sec_to_clock_time(abs(t1 - t2))
-
-
-def sec_to_clock_time(seconds):
-    h = seconds // 3600
-    m = (seconds - h*3600) // 60
-    s = (seconds - h*3600 - m*60)
-    return f'{m:02}:{s:02}' if h== 0 \
-            else f'{h}:{m:02}:{s:02}'
 
 
 if __name__ == "__main__":
