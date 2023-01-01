@@ -20,7 +20,7 @@ directions = {'outbound': 0, 'inbound': 1}
 @app.before_request
 def create_forms():
     # don't re-create forms on requests for static content
-    if ('static' not in request.endpoint):
+    if request.endpoint != None and 'static' not in request.endpoint:
         if 'route_form' not in g:
             g.route_form = create_route_form()
         if 'direction_form' not in g:
