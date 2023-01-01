@@ -71,6 +71,3 @@ def get_arrival_times(route_id, direction_id, stop_id):
                                         int(time.time()))
     return res
 
-
-if __name__ == "__main__":
-    get_arrival_times(sys.argv[1], sys.argv[2])
