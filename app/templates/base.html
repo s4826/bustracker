@@ -1,4 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}MBTA Bus Tracker{% endblock %}
-{% block head %}{{ super() }}{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
+{% endblock %}

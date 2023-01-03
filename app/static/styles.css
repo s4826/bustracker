@@ -1,0 +1,11 @@
+.container {
+    width: 200px;
+}
+
+.arrival_time {
+    font-weight: bold;
+    width: 50px;
+    border: 1px solid black;
+    background-color: cyan;
+    text-align: center;
+}
