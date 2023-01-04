@@ -1,11 +1,12 @@
 .container {
-    width: 200px;
+    width: 300px;
 }
 
-.arrival_time {
+.arrival-time {
     font-weight: bold;
-    width: 50px;
+    width: fit-content; 
     border: 1px solid black;
+    padding: 3px;
     background-color: cyan;
     text-align: center;
 }

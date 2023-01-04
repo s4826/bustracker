@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %} {{ super() }}{% endblock %}
+{% block head %}
+{{ super() }}
+<link href="/static/styles.css" rel="stylesheet" />
+{% endblock %}
 {% block content %}
 {{ super() }}
 <div class=container>

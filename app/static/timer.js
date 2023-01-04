@@ -1,5 +1,5 @@
 function timer() {
-    let arrivalElems = document.getElementsByClassName("arrival_time");
+    let arrivalElems = document.getElementsByClassName("arrival-time");
     let arrivalTimes = Array.from(arrivalElems).map(x => x.getAttribute("data-time") - 1);
     for (i = 0; i < arrivalElems.length; i++) {
         arrivalElems[i].innerHTML = mapToClockTime(arrivalTimes[i]);
