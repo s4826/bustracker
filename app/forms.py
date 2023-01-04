@@ -6,3 +6,6 @@ class RouteForm(FlaskForm):
 
 class DirectionForm(FlaskForm):
     dir_list = SelectField("Direction", validate_choice=True, default="")
+
+class SelectStopForm(FlaskForm):
+    stop_list = SelectField("Choose a stop", validate_choice=True)

@@ -2,12 +2,9 @@
 {% block content %}
 {{ super() }}
 <div class=container>
-    {% for stop in route_stops %}
-        <p><a class="stop" id={{stop}} href="">{{ route_stops[stop] }}</a></p>
-    {% endfor %}
+    {{ wtf.quick_form(stop_form) }}
 </div>
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script>createStopLinks()</script>
 {% endblock %}

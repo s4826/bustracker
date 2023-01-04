@@ -1,12 +1,6 @@
-{% extends "choose_dir.html" %}
-{% block head %}
-{{ super() }}
-<link href="/static/styles.css" rel="stylesheet" />
-{% endblock %}
+{% extends "choose_stop.html" %}
 {% block content %}
 {{ super() }}
-<div class=container>
-    <p id="stop-name">{{ stop_name }}</p>
 <div class=container>
 {% for p in predictions %}
     <p class="arrival_time" data-time={{p}}></p>

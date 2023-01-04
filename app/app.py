@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = environ['SECRET_KEY']
 
 bootstrap = Bootstrap(app)
+
 directions = {'outbound': 0, 'inbound': 1}
 
 @app.before_request
@@ -25,6 +26,8 @@ def create_forms():
             g.route_form = create_route_form()
         if 'direction_form' not in g:
             g.direction_form = create_direction_form()
+        if 'stop_form' not in g:
+            g.stop_form = create_stop_form()
 
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -41,21 +44,28 @@ def index(route_id=None, direction=None, stop_id=None):
 @app.route('/routes/<route_id>/<direction>', methods = ['GET', 'POST'])
 def choose_stop(route_id, direction):
     dir_id = directions[direction]
-    session['route_stops'] = api.build_route_dict(route_id, dir_id)
+    route_dir_id = str(route_id) + '-' + str(dir_id)
+    session[route_dir_id] = api.build_route_dict(route_id, dir_id)
+    g.stop_form.stop_list.choices = [('', '')] + \
+        list(session[route_dir_id].items())
     return render_template('choose_stop.html',
                            route_form=g.route_form,
                            direction_form=g.direction_form,
-                           route_stops=session['route_stops'])
+                           stop_form=g.stop_form)
 
 
 @app.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
 def get_stop_predictions(route_id, direction, stop_id):
     dir_id = directions[direction]
+    route_dir_id = str(route_id) + '-' + str(dir_id)
+    g.stop_form.stop_list.choices = [('', '')] + \
+        list(session[route_dir_id].items())
     predictions = sorted(api.get_arrival_times(route_id, dir_id, stop_id))
     return render_template('show_stop_times.html', route_form=g.route_form,
                            direction_form=g.direction_form,
+                           stop_form=g.stop_form,
                            predictions=predictions,
-                           stop_name=session['route_stops'][stop_id])
+                           stop_name=session[route_dir_id][stop_id])
 
 
 @Cache(seconds=30)
@@ -73,3 +83,7 @@ def create_direction_form():
     direction_form.dir_list.choices = dir_choices
     return direction_form
 
+
+def create_stop_form():
+    stop_form = SelectStopForm()
+    return stop_form

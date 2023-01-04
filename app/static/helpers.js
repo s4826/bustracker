@@ -8,6 +8,10 @@ function addEventListeners() {
     let dirElement = getDirElement();
     if (dirElement != null)
         dirElement.onchange = () => {selectDir(dirElement.value)};
+
+    let stopElement = getStopElement();
+    if (stopElement != null)
+        stopElement.onchange = () => {selectStop(stopElement.value)};
 }
 
 function selectRoute(route) {
@@ -23,11 +27,19 @@ function selectDir(dir) {
     }
 }
 
+function selectStop(stop) {
+    let route = getRouteElement().value;
+    let direction = getDirElement().value;
+    if (stop != '') {
+        window.location.assign(buildPath(route, direction, stop))
+    }
+}
+
 function populateSelections() {
     let pathElems = window.location.pathname.split('/');
 
     let startIdx = pathElems.indexOf('routes');
-    let fieldCandidates = [null, null];
+    let fieldCandidates = [null, null, null];
 
     if (startIdx++ != -1) {
         let fieldIdx = 0;
@@ -40,22 +52,14 @@ function populateSelections() {
 
     if (fieldCandidates[0] != null) {
         getRouteElement().value = fieldCandidates[0];
-        if (fieldCandidates[1] != null)
+        if (fieldCandidates[1] != null) {
             getDirElement().value = fieldCandidates[1];
+            if (fieldCandidates[2] != null)
+                getStopElement().value = fieldCandidates[2];
+        }
     }
 }
 
-function createStopLinks() {
-    let route = getRouteElement().value;
-    let direction = getDirElement().value;
-    let stopElems = document.getElementsByClassName('stop');
-    for (let stop of stopElems) {
-        let pathElems = [route, direction, stop.id];
-        let path = pathElems.join('/');
-        stop.setAttribute('href', window.origin + `/routes/${path}`);
-    }
-}
-   
 
 function getRouteElement() {
     return document.getElementById('route_list');
@@ -63,6 +67,10 @@ function getRouteElement() {
 
 function getDirElement() {
     return document.getElementById('dir_list');
+}
+
+function getStopElement() {
+    return document.getElementById('stop_list');
 }
 
 function buildPath(route = -1, direction = '', stop = -1) {
