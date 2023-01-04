@@ -5,11 +5,19 @@ from flask_wtf import FlaskForm
 from dotenv import load_dotenv
 from os import environ
 
+import logging
+from logging.config import dictConfig
+from log_config import log_config
+
 from app.forms import *
 from app.scripts.cache_decorator import Cache
 import app.scripts.api as api
 
 load_dotenv()
+
+dictConfig(log_config)
+debug_logger = logging.getLogger('debug')
+error_logger = logging.getLogger('error')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = environ['SECRET_KEY']
@@ -45,9 +53,13 @@ def index(route_id=None, direction=None, stop_id=None):
 def choose_stop(route_id, direction):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)
-    session[route_dir_id] = api.build_route_dict(route_id, dir_id)
-    g.stop_form.stop_list.choices = [('', '')] + \
-        list(session[route_dir_id].items())
+    try:
+        session[route_dir_id] = api.build_route_dict(route_id, dir_id)
+        g.stop_form.stop_list.choices = [('', '')] + \
+            list(session[route_dir_id].items())
+        debug_logger.info(f'Added {route_dir_id} dictionary to session object')
+    except KeyError:
+        error_logger.exception(f'{route_dir_id} not in session object')
     return render_template('choose_stop.html',
                            route_form=g.route_form,
                            direction_form=g.direction_form,
@@ -58,8 +70,15 @@ def choose_stop(route_id, direction):
 def get_stop_predictions(route_id, direction, stop_id):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)
-    g.stop_form.stop_list.choices = [('', '')] + \
-        list(session[route_dir_id].items())
+    if route_dir_id not in session:
+        session[route_dir_id] = api.build_route_dict(route_id, dir_id)
+
+    try:
+        g.stop_form.stop_list.choices = [('', '')] + \
+            list(session[route_dir_id].items())
+    except KeyError:
+        error_logger.exception(f'{route_dir_id} not in session object')
+
     predictions = sorted(api.get_arrival_times(route_id, dir_id, stop_id))
     return render_template('show_stop_times.html', route_form=g.route_form,
                            direction_form=g.direction_form,
