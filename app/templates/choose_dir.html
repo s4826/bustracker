@@ -1,6 +1,6 @@
 {% extends "choose_route.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block content %}
+{% block main %}
 {{ super() }}
 <div class=container>
     {{ wtf.quick_form(direction_form) }}

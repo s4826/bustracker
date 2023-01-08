@@ -5,8 +5,7 @@
 {{ super() }}
 <link href="/static/styles.css" rel="stylesheet" />
 {% endblock %}
-{% block content %}
-{{ super() }}
+{% block main %}
 <div class=container>
     {{ wtf.quick_form(route_form) }}
 </div>

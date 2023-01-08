@@ -5,3 +5,12 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
 {% endblock %}
+{% block content %}
+    {% block main %}
+    {% endblock %}
+    {% block footer %}
+        <div id="footer">
+            <a href="/create_account">Create Account</a>
+        </div>
+    {% endblock %}
+{% endblock %}
