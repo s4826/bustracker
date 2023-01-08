@@ -1,32 +1,24 @@
-from flask import Flask, render_template, g, request, session
-from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-
-from dotenv import load_dotenv
-from os import environ
+from flask import render_template, g, request, session, Blueprint
 
 import logging
 from logging.config import dictConfig
 from log_config import log_config
 
-from app.forms import *
-from app.scripts.cache_decorator import Cache
-import app.scripts.api as api
-
-load_dotenv()
+from .forms import *
+from .scripts.cache_decorator import Cache
+from .scripts import api
 
 dictConfig(log_config)
 debug_logger = logging.getLogger('debug')
 error_logger = logging.getLogger('error')
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = environ['SECRET_KEY']
+from app.models import Stop, User
 
-bootstrap = Bootstrap(app)
+app_bp = Blueprint('app_bp', __name__)
 
 directions = {'outbound': 0, 'inbound': 1}
 
-@app.before_request
+@app_bp.before_request
 def create_forms():
     # don't re-create forms on requests for static content
     if request.endpoint != None and 'static' not in request.endpoint:
@@ -38,8 +30,8 @@ def create_forms():
             g.stop_form = create_stop_form()
 
 
-@app.route('/', methods = ['GET', 'POST'])
-@app.route('/routes/<route_id>', methods = ['GET', 'POST'])
+@app_bp.route('/', methods = ['GET', 'POST'])
+@app_bp.route('/routes/<route_id>', methods = ['GET', 'POST'])
 def index(route_id=None, direction=None, stop_id=None):
     if route_id is not None:
         return render_template('choose_dir.html', route_form=g.route_form,
@@ -49,7 +41,7 @@ def index(route_id=None, direction=None, stop_id=None):
         return render_template('choose_route.html', route_form=g.route_form)
 
 
-@app.route('/routes/<route_id>/<direction>', methods = ['GET', 'POST'])
+@app_bp.route('/routes/<route_id>/<direction>', methods = ['GET', 'POST'])
 def choose_stop(route_id, direction):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)
@@ -66,7 +58,7 @@ def choose_stop(route_id, direction):
                            stop_form=g.stop_form)
 
 
-@app.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
+@app_bp.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
 def get_stop_predictions(route_id, direction, stop_id):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)
