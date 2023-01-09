@@ -10,11 +10,12 @@ association_table = Table(
     db.Column('stop_id', db.ForeignKey('stops.id'), primary_key=True),
 )
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    password = db.Column(db.String(128))
+    email = db.Column(db.String(64), unique=True, index=True)
+    pw_hash = db.Column(db.String(128))
     favorites = relationship('Stop', secondary=association_table,
                              back_populates='user_list')
 
