@@ -9,7 +9,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 from .views import app_bp
-from .login import login_bp
+from app.login import login_bp
 
 def create_app(config_name):
     app = Flask(__name__)
