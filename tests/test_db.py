@@ -2,18 +2,10 @@ import pytest
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from app import create_app, db
+from app import db
 from app.models import User, Stop
 
-@pytest.fixture
-def _app(scope='module'):
-    return create_app('testing')
-
-@pytest.fixture
-def _db(_app):
-    with _app.app_context():
-        db.drop_all()
-        db.create_all()
+from .fixtures import _app, _db
 
 @pytest.fixture
 def user():
