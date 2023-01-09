@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, flash, render_template, redirect
 from app import db, app_bp
 from .forms import LoginForm
@@ -18,4 +20,4 @@ def create_account():
             db.session.commit()
             return redirect(url_for('app_bp.index'))
 
-    return render_template('create_account.html', login_form=login_form)
+    return render_template('login/create_account.html', login_form=login_form)
