@@ -1,23 +1,27 @@
 import logging
 
 from flask import Blueprint, flash, render_template, redirect
+from sqlalchemy.orm.exc import NoResultFound
 from app import db, app_bp
 from .forms import LoginForm
 
 login_bp = Blueprint('login_bp', __name__)
 
-@login_bp.route('/create_account', methods = ['GET', 'POST'])
-def create_account():
+@login_bp.route('/login', methods = ['GET', 'POST'])
+def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
         name = login.username.data
         pw = login.password.data
-        if db.session.query(User).filter_by(username = name).first():
-            flash('Username already in use. Please choose another.')
-            return redirect(url_for('login_bp.create_account'))
-        else:
-            db.session.add(User(username=name, password=pw))
-            db.session.commit()
-            return redirect(url_for('app_bp.index'))
+        try:
+            user = db.session.query(User).filter_by(username = name).one()
+            if user.verify_password(pw):
+                pass
+            else:
+                flash('Invalid password')
+                return redirect(url_for('login_bp.login'))
+        except NoResultFound:
+            flash('Invalid username')
+            return redirect(url_for('login_bp.login'))
 
-    return render_template('login/create_account.html', login_form=login_form)
+    return render_template('login/login.html', login_form=login_form)
