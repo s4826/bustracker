@@ -1,3 +1,7 @@
+import logging
+
+from logging.config import dictConfig
+
 log_config = {
     "version": 1,
     "formatters": {
@@ -37,3 +41,8 @@ log_config = {
         "handlers": ["console", "debug"]
     }
 }
+
+dictConfig(log_config)
+
+def get_logger(name):
+    return logging.getLogger(name)

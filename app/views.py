@@ -1,18 +1,12 @@
 from flask import render_template, g, request, session, Blueprint
 
-import logging
-from logging.config import dictConfig
-from log_config import log_config
-
 from .forms import *
 from .scripts.cache_decorator import Cache
 from .scripts import api
+from log_config import get_logger
 
-dictConfig(log_config)
-debug_logger = logging.getLogger('debug')
-error_logger = logging.getLogger('error')
-
-from app.models import Stop, User
+debug_logger = get_logger('debug')
+error_logger = get_logger('error')
 
 app_bp = Blueprint('app_bp', __name__)
 
