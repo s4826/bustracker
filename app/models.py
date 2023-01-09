@@ -1,3 +1,4 @@
+from flask_login import UserMixin
 from sqlalchemy import Table, MetaData
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
