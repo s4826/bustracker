@@ -85,3 +85,7 @@ function buildPath(route = -1, direction = '', stop = -1) {
         path = [route, direction, stop].join('/');
     return window.origin + `/routes/${path}`;
 } 
+
+function delete_flash(flash) {
+    $(flash).parent().remove()
+}

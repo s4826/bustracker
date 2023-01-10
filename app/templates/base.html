@@ -1,13 +1,57 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}MBTA Bus Tracker{% endblock %}
-{% block head %}
+{% block styles %}
 {{ super() }}
-<link href="/static/styles.css" rel="stylesheet" />
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
+<link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon">
+{% endblock %}
+{% block navbar %}
+<div class="container">
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Bus Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                                     data-target="#navbarCollapse"
+                                                     aria-controls="navbarCollapse"
+                                                     aria-expanded="flase"
+                                                     aria-label="Toggle
+                                                                  navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login_bp.logout') }}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login_bp.login') }}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login_bp.register') }}">
+                            Register
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>
 {% endblock %}
 {% block content %}
     {% block main %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+        <p>
+         {{ message }}
+         <button type="button" class="close" aria-label="Close"
+             onclick=delete_flash(this)>
+             <span aria-hidden="true">&times;</span>
+         </button>
+        </p>
+        {% endfor %}
+    </div>
     {% endblock %}
     {% block footer %}
     {% endblock %}
