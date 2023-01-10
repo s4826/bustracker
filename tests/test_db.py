@@ -9,7 +9,7 @@ from .fixtures import _app, _db
 
 @pytest.fixture
 def user():
-    return User(username='test_user')
+    return User(email='user@test.com', password='password')
 
 @pytest.fixture
 def stop():
@@ -26,7 +26,7 @@ def test_add_user(_app, _db, user):
         db.session.commit()
 
         user_one = db.session.query(User).first()
-        assert user_one.username == 'test_user'
+        assert user_one.email == 'user@test.com'
         assert isinstance(user_one.id, int)
 
 

@@ -1,6 +1,6 @@
 import logging
 
-from flask import Blueprint, flash, render_template, redirect
+from flask import Blueprint, flash, render_template, redirect, url_for
 from sqlalchemy.orm.exc import NoResultFound
 from app import db, app_bp
 from app.models import User
@@ -12,10 +12,10 @@ login_bp = Blueprint('login_bp', __name__)
 def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
-        name = login_form.username.data
+        email = login_form.email.data
         pw = login_form.password.data
         try:
-            user = db.session.query(User).filter_by(username = name).one()
+            user = db.session.query(User).filter_by(email=email).one()
             if user.verify_password(pw):
                 pass
             else:
@@ -38,7 +38,7 @@ def register():
             flash('Passwords do not match')
             return redirect(url_for('login_bp.register'))
         else:
-            user = db.session.query(User).filter_by(email = email).first()
+            user = db.session.query(User).filter_by(email=email).first()
             if user is not None:
                 flash('Email already registered')
                 return redirect(url_for('login_bp.login'))

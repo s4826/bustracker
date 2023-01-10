@@ -14,7 +14,6 @@ association_table = Table(
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     pw_hash = db.Column(db.String(128))
     favorites = relationship('Stop', secondary=association_table,
@@ -32,7 +31,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.pw_hash, password)
 
     def __repr__(self):
-        return "<User '%s'>" % self.username
+        return "<User '%s'>" % self.email
 
 class Stop(db.Model):
     __tablename__ = 'stops'
