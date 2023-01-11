@@ -2,11 +2,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block main %}
 {{ super() }}
-<div class="container">
-{% for message in get_flashed_messages() %}
-    <p style="color:red;">{{ message }}</p>
-{% endfor %}
-</div>
 <div class=container>
     {{ wtf.quick_form(login_form) }}
 </div>
