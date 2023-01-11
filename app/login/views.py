@@ -1,10 +1,12 @@
-import logging
-
 from flask import Blueprint, flash, render_template, redirect, url_for
+from flask_login import login_user, logout_user, current_user
 from sqlalchemy.orm.exc import NoResultFound
 from app import db, app_bp
 from app.models import User
 from .forms import LoginForm, RegisterForm
+
+from log_config import get_logger
+logger = get_logger('debug')
 
 login_bp = Blueprint('login_bp', __name__)
 
@@ -17,7 +19,10 @@ def login():
         try:
             user = db.session.query(User).filter_by(email=email).one()
             if user.verify_password(pw):
-                pass
+                login_user(user, remember=login_form.remember.data, force=True)
+                logger.info(f'{current_user} logged in')
+                flash('Logged in')
+                return redirect(url_for('app_bp.index'))
             else:
                 flash('Invalid password')
                 return redirect(url_for('login_bp.login'))
@@ -26,6 +31,13 @@ def login():
             return redirect(url_for('login_bp.login'))
 
     return render_template('login/login.html', login_form=login_form)
+
+@login_bp.route('/logout', methods = ['GET'])
+def logout():
+    logger.info(f'{current_user} logged out')
+    logout_user()
+    flash('Logged out')
+    return redirect(url_for('app_bp.index'))
 
 @login_bp.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -47,5 +59,6 @@ def register():
                                 password=pw1)
                 db.session.add(new_user)
                 db.session.commit()
+                logger.info(f'New user {new_user} registered')
                 return redirect(url_for('app_bp.index'))
     return render_template('login/register.html', register_form=register_form)
