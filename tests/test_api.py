@@ -2,6 +2,7 @@ import pytest
 import requests
 import os
 import json
+from collections import OrderedDict
 
 from app.scripts import api
 from app.scripts.utils import *
@@ -45,3 +46,6 @@ def test_get_all_route_ids(monkeypatch):
 
     assert api.get_all_route_ids() == lines
 
+def test_build_route_dict():
+    d = api.build_route_dict(57, 1)
+    assert isinstance(d, OrderedDict)

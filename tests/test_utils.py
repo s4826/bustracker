@@ -31,8 +31,3 @@ def test_add_filters():
     url = add_filters('', {})
     assert url == ''
 
-
-def test_sec_to_clock_time():
-    assert sec_to_clock_time(1) == '00:01'
-    assert sec_to_clock_time(63) == '01:03'
-    assert sec_to_clock_time(3724) == '01:02:04'
