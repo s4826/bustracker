@@ -2,8 +2,12 @@ function timer() {
     let arrivalElems = document.getElementsByClassName("arrival-time");
     let arrivalTimes = Array.from(arrivalElems).map(x => x.getAttribute("data-time") - 1);
     for (i = 0; i < arrivalElems.length; i++) {
-        arrivalElems[i].innerHTML = mapToClockTime(arrivalTimes[i]);
-        arrivalElems[i].setAttribute("data-time", arrivalTimes[i]);
+        if (arrivalTimes[i] < 0)
+            arrivalElems[i].parentNode.removeChild(arrivalElems[i])
+        else {
+            arrivalElems[i].innerHTML = mapToClockTime(arrivalTimes[i]);
+            arrivalElems[i].setAttribute("data-time", arrivalTimes[i]);
+        }
     }
 
     setTimeout(timer, 1000);
