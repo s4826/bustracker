@@ -3,6 +3,7 @@ import time
 import json
 import requests
 import gtfs_realtime_pb2
+from collections import OrderedDict
 
 from cache_decorator import Cache
 
@@ -20,7 +21,7 @@ def build_route_dict(route_id, direction_id):
     Create a dictionary object and populate it with all stops on
     this route/direction
     """
-    route_dict = {}
+    route_dict = OrderedDict()
 
     if type(route_id) != str:
         route_id = str(route_id)
