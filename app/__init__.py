@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_session import Session
 from config import config
 
 from log_config import get_logger
@@ -12,6 +13,7 @@ logger = get_logger('debug')
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 migrate = Migrate()
+session = Session()
 
 from .views import app_bp
 from app.login.views import login_bp
@@ -31,6 +33,7 @@ def create_app(config_name):
     bootstrap.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    session.init_app(app)
     login_manager.init_app(app)
 
     app.register_blueprint(app_bp)
