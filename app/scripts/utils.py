@@ -24,16 +24,3 @@ def add_filters(url, filter_dict):
             url += "filter[{}]={}&".format(key, filter_dict[key])
     return url
 
-
-def clock_time_difference(t1, t2):
-    return sec_to_clock_time(abs(t1 - t2))
-
-
-def sec_to_clock_time(seconds):
-    h = seconds // 3600
-    m = (seconds - h*3600) // 60
-    s = (seconds - h*3600 - m*60)
-    return f'{m:02}:{s:02}' if h== 0 \
-            else f'{h:02}:{m:02}:{s:02}'
-
-
