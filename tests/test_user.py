@@ -1,22 +1,20 @@
 import pytest
 from flask_login import login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from app import db
 from app.models import User
-from .fixtures import _app
+from .fixtures import _app, _db, client, user
 
 
-def test_password_verification():
-    user = User(email='user@test.com', password='password')
+def test_password_verification(user):
     assert not user.verify_password('pass')
     assert user.verify_password('password')
 
-def test_password_access():
-    user = User(email='user@test.com', password='password')
+def test_password_access(user):
     with pytest.raises(AttributeError):
         user.password
 
-def test_user_login(_app):
-    user = User(email='user@test.com', password='password')
+def test_flask_login(_app, user):
     with _app.app_context():
         with _app.test_request_context():
             assert not current_user.is_authenticated
@@ -27,3 +25,16 @@ def test_user_login(_app):
         with _app.test_request_context():
             logout_user()
             assert not current_user.is_authenticated
+
+def test_register_user(_app, _db, client, user):
+    _app.config['WTF_CSRF_ENABLED'] = False
+    response = client.post("/register",
+            data={'email': 'user@test.com',
+                  'password': 'password',
+                  'confirm_password': 'password'})
+    _app.config['WTF_CSRF_ENABLED'] = True
+    assert response.status_code == 302
+    
+    with _app.app_context():
+        assert db.session.query(User).filter_by(email='user@test.com').one()
+

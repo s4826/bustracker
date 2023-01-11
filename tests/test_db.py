@@ -5,11 +5,7 @@ from sqlalchemy.orm import Session
 from app import db
 from app.models import User, Stop
 
-from .fixtures import _app, _db
-
-@pytest.fixture
-def user():
-    return User(email='user@test.com', password='password')
+from .fixtures import _app, _db, user
 
 @pytest.fixture
 def stop():
