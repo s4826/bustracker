@@ -1,6 +1,7 @@
 import pytest
 from flask_login import login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedSerializer
 from app import db
 from app.models import User
 from .fixtures import _app, _db, client, user
@@ -38,3 +39,10 @@ def test_register_user(_app, _db, client, user):
     with _app.app_context():
         assert db.session.query(User).filter_by(email='user@test.com').one()
 
+def test_confirmation_token(_app, user):
+    ctx = _app.app_context()
+    ctx.push()
+    serializer = TimedSerializer(_app.config['SECRET_KEY'])
+    token = user.create_confirmation_token(serializer) 
+    assert serializer.loads(token) == user.id
+    ctx.pop()

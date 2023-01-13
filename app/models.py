@@ -1,7 +1,9 @@
+from flask import current_app
 from flask_login import UserMixin
 from sqlalchemy import Table, MetaData
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedSerializer
 from . import db
 
 association_table = Table(
@@ -29,6 +31,11 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.pw_hash, password)
+
+    def create_confirmation_token(self, serializer=None):
+        if serializer is None:
+            serializer = TimedSerializer(current_app.config['SECRET_KEY'])
+        return serializer.dumps(self.id)
 
     def __repr__(self):
         return "<User '%s'>" % self.email
