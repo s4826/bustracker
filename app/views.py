@@ -1,6 +1,6 @@
 from flask import render_template, g, request, session, Blueprint
 
-from .forms import *
+from .forms import RouteForm, DirectionForm, SelectStopForm
 from .scripts.cache_decorator import Cache
 from .scripts import api
 from log_config import get_logger
@@ -12,10 +12,11 @@ app_bp = Blueprint('app_bp', __name__)
 
 directions = {'outbound': 0, 'inbound': 1}
 
+
 @app_bp.before_request
 def create_forms():
     # don't re-create forms on requests for static content
-    if request.endpoint != None and 'static' not in request.endpoint:
+    if request.endpoint is not None and 'static' not in request.endpoint:
         if 'route_form' not in g:
             g.route_form = create_route_form()
         if 'direction_form' not in g:
@@ -24,8 +25,8 @@ def create_forms():
             g.stop_form = create_stop_form()
 
 
-@app_bp.route('/', methods = ['GET', 'POST'])
-@app_bp.route('/routes/<route_id>', methods = ['GET', 'POST'])
+@app_bp.route('/', methods=['GET', 'POST'])
+@app_bp.route('/routes/<route_id>', methods=['GET', 'POST'])
 def index(route_id=None, direction=None, stop_id=None):
     if route_id is not None:
         return render_template('choose_dir.html', route_form=g.route_form,
@@ -35,7 +36,7 @@ def index(route_id=None, direction=None, stop_id=None):
         return render_template('choose_route.html', route_form=g.route_form)
 
 
-@app_bp.route('/routes/<route_id>/<direction>', methods = ['GET', 'POST'])
+@app_bp.route('/routes/<route_id>/<direction>', methods=['GET', 'POST'])
 def choose_stop(route_id, direction):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)
@@ -52,7 +53,7 @@ def choose_stop(route_id, direction):
                            stop_form=g.stop_form)
 
 
-@app_bp.route('/routes/<route_id>/<direction>/<stop_id>', methods = ['GET'])
+@app_bp.route('/routes/<route_id>/<direction>/<stop_id>', methods=['GET'])
 def get_stop_predictions(route_id, direction, stop_id):
     dir_id = directions[direction]
     route_dir_id = str(route_id) + '-' + str(dir_id)

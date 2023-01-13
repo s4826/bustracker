@@ -1,20 +1,18 @@
-import sys
 import time
-import json
 import requests
-import gtfs_realtime_pb2
 from collections import OrderedDict
 
-from cache_decorator import Cache
+from . import gtfs_realtime_pb2
+from .cache_decorator import Cache
+from .constants import TRIP_UPDATES
+from .utils import build_json_request_url
 
-from constants import *
-from utils import *
 
 def get_all_route_ids():
-    url = build_json_request_url("routes", fields=['id']) 
+    url = build_json_request_url("routes", fields=['id'])
     r = requests.get(url)
-    return [route['id'] for route in r.json()['data']] 
-    
+    return [route['id'] for route in r.json()['data']]
+
 
 def build_route_dict(route_id, direction_id):
     """
@@ -64,11 +62,8 @@ def get_arrival_times(route_id, direction_id, stop_id):
                                direction_id and x.trip_update.trip.route_id ==
                                route_id, updates)
     for du in direction_updates:
-        trip_id = du.trip_update.trip.trip_id
         for stop_time_update in du.trip_update.stop_time_update:
             if (stop_time_update.HasField('arrival') and
-                stop_time_update.stop_id == stop_id):
-                    res.append(stop_time_update.arrival.time -
-                                        int(time.time()))
+                    stop_time_update.stop_id == stop_id):
+                res.append(stop_time_update.arrival.time - int(time.time()))
     return res
-

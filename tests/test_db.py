@@ -1,11 +1,11 @@
 import pytest
 from datetime import datetime
-from sqlalchemy.orm import Session
 
 from app import db
 from app.models import User, Stop
 
-from .fixtures import _app, _db, user
+from .fixtures import _app, _db, user  # noqa: F401
+
 
 @pytest.fixture
 def stop():

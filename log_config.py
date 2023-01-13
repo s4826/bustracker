@@ -44,5 +44,6 @@ log_config = {
 
 dictConfig(log_config)
 
+
 def get_logger(name):
     return logging.getLogger(name)

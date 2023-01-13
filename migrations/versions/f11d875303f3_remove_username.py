@@ -1,3 +1,4 @@
+# flake8: noqa
 """remove username
 
 Revision ID: f11d875303f3

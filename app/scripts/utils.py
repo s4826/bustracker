@@ -1,6 +1,5 @@
-# utils.py
+from .constants import JSON_API_PREFIX
 
-from constants import JSON_API_PREFIX
 
 def build_json_request_url(request_type, filter_dict=None, fields=None):
     url = JSON_API_PREFIX + request_type + "?"
@@ -13,6 +12,7 @@ def build_json_request_url(request_type, filter_dict=None, fields=None):
         url += f'fields[{request_type[:-1]}]=' + field_filter
     return url
 
+
 def add_filters(url, filter_dict):
 
     # add sorting option if present
@@ -23,4 +23,3 @@ def add_filters(url, filter_dict):
         if 'sort' != key:
             url += "filter[{}]={}&".format(key, filter_dict[key])
     return url
-

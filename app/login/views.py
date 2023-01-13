@@ -1,16 +1,17 @@
 from flask import Blueprint, flash, render_template, redirect, url_for
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy.orm.exc import NoResultFound
-from app import db, app_bp
 from app.models import User
 from .forms import LoginForm, RegisterForm
+from app import db
 
 from log_config import get_logger
 logger = get_logger('debug')
 
 login_bp = Blueprint('login_bp', __name__)
 
-@login_bp.route('/login', methods = ['GET', 'POST'])
+
+@login_bp.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
@@ -32,14 +33,16 @@ def login():
 
     return render_template('login/login.html', login_form=login_form)
 
-@login_bp.route('/logout', methods = ['GET'])
+
+@login_bp.route('/logout', methods=['GET'])
 def logout():
     logger.info(f'{current_user} logged out')
     logout_user()
     flash('Logged out')
     return redirect(url_for('app_bp.index'))
 
-@login_bp.route('/register', methods = ['GET', 'POST'])
+
+@login_bp.route('/register', methods=['GET', 'POST'])
 def register():
     register_form = RegisterForm()
     if register_form.validate_on_submit():

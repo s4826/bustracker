@@ -1,12 +1,9 @@
-import pytest
 import requests
 import os
 import json
 from collections import OrderedDict
 
 from app.scripts import api
-from app.scripts.utils import *
-from app.scripts import gtfs_realtime_pb2
 
 test_dir = os.path.dirname(__file__)
 
@@ -45,6 +42,7 @@ def test_get_all_route_ids(monkeypatch):
         lines = list(map(lambda s: s.strip(), routes.readlines()))
 
     assert api.get_all_route_ids() == lines
+
 
 def test_build_route_dict():
     d = api.build_route_dict(57, 1)

@@ -1,6 +1,5 @@
-# cache_decorator.py
-
 import time
+
 
 class Cache(object):
     """
@@ -18,12 +17,11 @@ class Cache(object):
 
     def __call__(self, func):
         def wrapper():
-            if abs(time.time() - self.most_recent) < self.seconds and self.res is not None:
+            if abs(time.time() - self.most_recent) < self.seconds and \
+                    self.res is not None:
                 return self.res
             else:
                 self.res = func()
                 self.most_recent = time.time()
                 return self.res
         return wrapper
-
-

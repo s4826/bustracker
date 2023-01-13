@@ -1,3 +1,4 @@
+# flake8: noqa
 """second migration
 
 Revision ID: 68341a3bcda8

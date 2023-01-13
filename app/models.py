@@ -1,9 +1,10 @@
 from flask import current_app
 from flask_login import UserMixin
-from sqlalchemy import Table, MetaData
+from sqlalchemy import Table
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedSerializer
+
 from . import db
 
 association_table = Table(
@@ -12,6 +13,7 @@ association_table = Table(
     db.Column('user_id', db.ForeignKey('users.id'), primary_key=True),
     db.Column('stop_id', db.ForeignKey('stops.id'), primary_key=True),
 )
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -37,8 +39,10 @@ class User(UserMixin, db.Model):
             serializer = TimedSerializer(current_app.config['SECRET_KEY'])
         return serializer.dumps(self.id)
 
+
     def __repr__(self):
         return "<User '%s'>" % self.email
+
 
 class Stop(db.Model):
     __tablename__ = 'stops'

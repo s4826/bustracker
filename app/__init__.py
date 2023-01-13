@@ -1,4 +1,5 @@
-from flask import Flask, Blueprint
+# flake8: noqa
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -22,9 +23,10 @@ login_manager = LoginManager()
 login_manager.login_view = 'login_bp.login'
 
 from .models import User
+
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.query(User).filter_by(id = int(user_id)).first()
+    return db.session.query(User).filter_by(id=int(user_id)).first()
 
 
 def create_app(config_name):

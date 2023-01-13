@@ -10,14 +10,13 @@ def test_build_json_request_url():
     fields = ['name', 'stop_id']
     url_two = build_json_request_url(request, filters, fields)
     assert url_two == JSON_API_PREFIX + f'{request}?' + \
-                        'filter[route]=77&' + \
-                        'filter[direction]=0&' + \
-                        'fields[route]=name,stop_id'
+        'filter[route]=77&' + \
+        'filter[direction]=0&' + \
+        'fields[route]=name,stop_id'
 
     url_three = build_json_request_url(request, filters)
     assert url_three == JSON_API_PREFIX + f'{request}?' + \
-                        'filter[route]=77&' + \
-                        'filter[direction]=0&'
+        'filter[route]=77&' + 'filter[direction]=0&'
 
 
 def test_add_filters():
