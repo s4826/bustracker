@@ -1,5 +1,9 @@
-from app.scripts.utils import *
-from app.scripts.constants import *
+from app.scripts.utils import build_json_request_url
+from app.scripts.utils import add_filters
+from app.scripts.utils import generate_confirmation_email_content
+from app.scripts.constants import JSON_API_PREFIX
+from .fixtures import _app, user
+
 
 def test_build_json_request_url():
     request = 'routes'
@@ -30,3 +34,9 @@ def test_add_filters():
     url = add_filters('', {})
     assert url == ''
 
+
+def test_generate_confirmation_email_content(_app, user):
+    with _app.app_context():
+        token = user.create_confirmation_token()
+    email = generate_confirmation_email_content(token)
+    assert token in email

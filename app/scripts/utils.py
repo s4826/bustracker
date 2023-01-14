@@ -23,3 +23,12 @@ def add_filters(url, filter_dict):
         if 'sort' != key:
             url += "filter[{}]={}&".format(key, filter_dict[key])
     return url
+
+
+def generate_confirmation_email_content(token):
+    link = f'http://localhost:5000/confirm_account/{token}'
+    content = 'Thanks for registering with the bustracker app!\n' + \
+        f'Please confirm your email address at the following link.\n\n' + \
+        f'{link}'
+
+    return content

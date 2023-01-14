@@ -1,4 +1,8 @@
+import asyncio
 import pytest
+import email.parser
+import requests
+from requests.auth import HTTPBasicAuth
 from flask_login import login_user, logout_user, current_user
 from itsdangerous import TimedSerializer
 from app import db
@@ -42,9 +46,30 @@ def test_register_user(_app, _db, client, user):
 
 
 def test_confirmation_token(_app, user):
-    ctx = _app.app_context()
-    ctx.push()
-    serializer = TimedSerializer(_app.config['SECRET_KEY'])
-    token = user.create_confirmation_token(serializer)
+    with _app.app_context():
+        serializer = TimedSerializer(_app.config['SECRET_KEY'])
+        token = user.create_confirmation_token(serializer)
     assert serializer.loads(token) == user.id
-    ctx.pop()
+
+
+def test_send_confirmation_email(_app, user):
+    test_mail_server = 'http://{}:{}'.format(_app.config['MAIL_SERVER'], 8025)
+    message_endpoint = '/api/v1/messages'
+    with _app.app_context():
+        asyncio.run(user.send_confirmation_email())
+
+    auth = HTTPBasicAuth('test@test.com', 'test')
+    r = requests.get(test_mail_server + message_endpoint, auth=auth)
+    assert r.json() 
+
+    message_id = r.json()[0]['ID']
+    r = requests.get(test_mail_server + \
+        message_endpoint + f'/{message_id}' + '/download', auth=auth)
+
+    parser = email.parser.BytesParser()
+    email_message = parser.parsebytes(r.content)
+    for part in email_message.walk():
+        if part.get_content_type() == 'text/plain':
+            with _app.app_context():
+                assert user.create_confirmation_token() in \
+                        part.get_payload(decode=True).decode()

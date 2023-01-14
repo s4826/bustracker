@@ -1,11 +1,13 @@
 from flask import current_app
 from flask_login import UserMixin
+from flask_mailing import Message
 from sqlalchemy import Table
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedSerializer
 
-from . import db
+from . import db, mail
+from .scripts.utils import generate_confirmation_email_content
 
 association_table = Table(
     'association_table',
@@ -20,6 +22,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     pw_hash = db.Column(db.String(128))
+    confirmed = db.Column(db.Boolean, default=False)
     favorites = relationship('Stop', secondary=association_table,
                              back_populates='user_list')
 
@@ -39,6 +42,14 @@ class User(UserMixin, db.Model):
             serializer = TimedSerializer(current_app.config['SECRET_KEY'])
         return serializer.dumps(self.id)
 
+    async def send_confirmation_email(self):
+        token = self.create_confirmation_token()
+        message = Message(
+                subject='Bustracker Email Address Confirmation',
+                recipients=[self.email],
+                body=generate_confirmation_email_content(token)
+                )
+        await mail.send_message(message)
 
     def __repr__(self):
         return "<User '%s'>" % self.email
