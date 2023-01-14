@@ -1,35 +1,43 @@
 import os
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
+from dotenv import dotenv_values
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ['SECRET_KEY']
+    config = dotenv_values(".env")
+    SECRET_KEY = config['SECRET_KEY']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'filesystem'
     SESSION_COOKIE_SAMESITE = 'Lax'
 
 
 class DevelopmentConfig(Config):
+    config = dotenv_values(".env.dev")
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
         os.path.join(base_dir, 'db/data.sqlite')
-    MAIL_USERNAME = 'test@test.com'
-    MAIL_PASSWORD = 'test'
-    MAIL_SERVER = '0.0.0.0'
-    MAIL_PORT = '1025'
-    MAIL_FROM = 'test@test.com'
-    MAIL_USE_TLS = False
+    MAIL_USERNAME = config['MAIL_USERNAME']
+    MAIL_PASSWORD = config['MAIL_PASSWORD'] 
+    MAIL_SERVER = config['MAIL_SERVER'] 
+    MAIL_PORT = config['MAIL_PORT'] 
+    MAIL_FROM = config['MAIL_FROM'] 
+    MAIL_USE_TLS = True
     MAIL_USE_SSL = False
 
 
-class TestConfig(DevelopmentConfig):
+class TestConfig(Config):
+    config = dotenv_values(".env.test")
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
         os.path.join(base_dir, 'db/test.sqlite')
+    MAIL_USERNAME = config['MAIL_USERNAME']
+    MAIL_PASSWORD = config['MAIL_PASSWORD'] 
+    MAIL_SERVER = config['MAIL_SERVER'] 
+    MAIL_PORT = config['MAIL_PORT'] 
+    MAIL_FROM = config['MAIL_FROM'] 
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = False
 
 
 config = {
