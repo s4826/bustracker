@@ -1,3 +1,5 @@
+"""Database models for User and Stop"""
+
 from flask import current_app
 from flask_login import UserMixin
 from flask_mailing import Message
@@ -6,8 +8,13 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedSerializer
 
-from . import db, mail
+from .extensions import db, mail, login_manager
 from .scripts.utils import generate_confirmation_email_content
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Default user loader for Flask-Login"""
+    return db.session.query(User).filter_by(id=int(user_id)).first()
 
 association_table = Table(
     'association_table',
@@ -18,6 +25,7 @@ association_table = Table(
 
 
 class User(UserMixin, db.Model):
+    """User model, with associated email and password methods"""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
@@ -28,21 +36,30 @@ class User(UserMixin, db.Model):
 
     @property
     def password(self):
-        raise AttributeError("Cannot read password")
+        """Password property"""
+        raise AttributeError('Password is not a readable attribute')
 
     @password.setter
     def password(self, password):
+        """Password setter"""
         self.pw_hash = generate_password_hash(password)
 
     def verify_password(self, password):
+        """Verify password"""
         return check_password_hash(self.pw_hash, password)
 
     def create_confirmation_token(self, serializer=None):
+        """
+        Create a confirmation token for this user.
+
+        :param serializer: Specify an optional serializer for token creation.
+        """
         if serializer is None:
             serializer = TimedSerializer(current_app.config['SECRET_KEY'])
         return serializer.dumps(self.id)
 
     async def send_confirmation_email(self):
+        """Send an account confirmation email to this user."""
         token = self.create_confirmation_token()
         message = Message(
                 subject='Bustracker Email Address Confirmation',
@@ -52,10 +69,12 @@ class User(UserMixin, db.Model):
         await mail.send_message(message)
 
     def __repr__(self):
-        return "<User '%s'>" % self.email
+        return f"<User '{self.email}'>"
 
 
 class Stop(db.Model):
+    """An MBTA stop"""
+
     __tablename__ = 'stops'
     id = db.Column(db.Integer, primary_key=True)
     route_id = db.Column(db.String(32), nullable=False)
@@ -65,4 +84,4 @@ class Stop(db.Model):
                              back_populates='favorites')
 
     def __repr__(self):
-        return "<Stop '%d'>" % self.id
+        return f"<Stop '{self.id}'>"

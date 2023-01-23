@@ -1,6 +1,8 @@
+"""Functions to interface with MBTA v3 API"""
+
 import time
-import requests
 from collections import OrderedDict
+import requests
 
 from . import gtfs_realtime_pb2
 from .cache_decorator import Cache
@@ -9,6 +11,7 @@ from .utils import build_json_request_url
 
 
 def get_all_route_ids():
+    """Get a list of all available route ids from the MBTA"""
     url = build_json_request_url("routes", fields=['id'])
     r = requests.get(url)
     return [route['id'] for route in r.json()['data']]
@@ -18,10 +21,13 @@ def build_route_dict(route_id, direction_id):
     """
     Create a dictionary object and populate it with all stops on
     this route/direction
+
+    :param route_id: MBTA route id
+    :param direction_id: Travel direction, 0 (Outbound), or 1 (Inbound)
     """
     route_dict = OrderedDict()
 
-    if type(route_id) != str:
+    if not isinstance(route_id, str):
         route_id = str(route_id)
 
     filter_dict = {"route": route_id, "direction_id": direction_id}
@@ -37,6 +43,11 @@ def build_route_dict(route_id, direction_id):
 
 @Cache(seconds=15)
 def get_trip_updates():
+    """
+    Query the MBTA protobuf feed for all trip updates.
+
+    URL: 'https://cdn.mbta.com/realtime/TripUpdates.pb'
+    """
     res = []
 
     feed = gtfs_realtime_pb2.FeedMessage()
@@ -50,6 +61,10 @@ def get_trip_updates():
 def get_arrival_times(route_id, direction_id, stop_id):
     """
     Get arrival times for a route/direction/stop combination.
+
+    :param route_id: MBTA route id
+    :param direction_id: Travel direction, 0 (Outbound), or 1 (Inbound)
+    :param stop_id: MBTA stop id
     """
     res = []
 

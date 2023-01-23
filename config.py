@@ -1,3 +1,4 @@
+"""Config values for different development scenarios"""
 import os
 from dotenv import dotenv_values
 

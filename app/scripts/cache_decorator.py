@@ -1,7 +1,9 @@
+"""Function call cache decorator"""
+
 import time
 
 
-class Cache(object):
+class Cache():
     """
     Cache the results of a function call for a certain amount of time
     """
@@ -20,8 +22,7 @@ class Cache(object):
             if abs(time.time() - self.most_recent) < self.seconds and \
                     self.res is not None:
                 return self.res
-            else:
-                self.res = func()
-                self.most_recent = time.time()
-                return self.res
+            self.res = func()
+            self.most_recent = time.time()
+            return self.res
         return wrapper
