@@ -30,3 +30,8 @@ class RegisterForm(FlaskForm):
                                        EqualTo('password',
                                             message='Passwords do not match.')])
     submit = SubmitField('Register')
+
+class ResendConfirmation(FlaskForm):
+    """Confirmation email form"""
+    email = StringField('Email', validators=[InputRequired(), Email()])
+    submit = SubmitField('Submit')
