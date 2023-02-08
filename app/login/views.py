@@ -9,6 +9,7 @@ from flask import url_for
 from flask import current_app
 from flask import request
 from flask import Markup
+from flask import session
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from itsdangerous import TimedSerializer
@@ -27,10 +28,14 @@ login_bp = Blueprint('login_bp', __name__)
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Login view"""
+
+    session.permanent = False
+
     login_form = LoginForm()
     if login_form.validate_on_submit():
         email = login_form.email.data
         pw = login_form.password.data
+        remember = login_form.remember.data
         try:
             user = db.session.query(User).filter_by(email=email).one()
             if user.verify_password(pw):
