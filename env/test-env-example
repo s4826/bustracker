@@ -1,0 +1,13 @@
+# Example environment variables for a test configuration
+# Copy this file to the top-level directory of the project and
+# rename it '.env.test' to use these values during testing.
+
+# MailHog test server
+MAIL_SERVER=0.0.0.0
+MAIL_PORT=1025
+
+MAIL_USERNAME="test@test.com"
+MAIL_PASSWORD="test"
+MAIL_FROM="test@test.com"
+MAIL_USE_TLS=False
+***REMOVED***

@@ -1,0 +1,12 @@
+# Examble environment variables for a base app configuration.
+# To use these values, copy this file to the top-level directory
+# of the project and change SECRET_KEY to a long, hard-to-guess string.
+
+# FLASK_DEBUG=1
+
+FLASK_APP=bustracker.py
+SECRET_KEY=super_secret_key
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+SESSION_TYPE=filesystem
+SESSION_COOKIE_SAMESITE=Lax
+SESSION_PERMANENT=False
