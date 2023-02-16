@@ -18,12 +18,12 @@ log_config = {
         },
         "debug": {
             "class": "logging.FileHandler",
-            "filename": "logs/app.debug.log",
+            "filename": "bustracker/logs/app.debug.log",
             "formatter": "default"
         },
         "error": {
             "class": "logging.FileHandler",
-            "filename": "logs/app.errors.log",
+            "filename": "bustracker/logs/app.errors.log",
             "formatter": "default"
         },
     },

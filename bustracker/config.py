@@ -11,6 +11,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = config['SQLALCHEMY_TRACK_MODIFICATIONS']
     SESSION_TYPE = config['SESSION_TYPE']
     SESSION_COOKIE_SAMESITE = config['SESSION_COOKIE_SAMESITE']
+    SESSION_FILE_DIR = config['SESSION_FILE_DIR']
 
 class DevelopmentConfig(Config):
     config = dotenv_values(".env.dev")
@@ -23,6 +24,10 @@ class DevelopmentConfig(Config):
     MAIL_FROM = config['MAIL_FROM'] 
     MAIL_USE_TLS = config['MAIL_USE_TLS']
     MAIL_USE_SSL = config['MAIL_USE_SSL']
+
+
+class DevelopmentConfigWithPostgres(DevelopmentConfig):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://sean:password@localhost/bustracker'
 
 
 class TestConfig(Config):
@@ -40,6 +45,7 @@ class TestConfig(Config):
 
 config = {
     'development': DevelopmentConfig,
+    'postgres_config': DevelopmentConfigWithPostgres,
     'testing': TestConfig,
     'default': DevelopmentConfig
 }

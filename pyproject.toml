@@ -4,3 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bustracker"
+version = "0.0.1"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

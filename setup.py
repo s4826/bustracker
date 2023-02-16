@@ -1,5 +1,8 @@
 from setuptools import setup
 
+with open('requirements.txt') as file:
+    requirements = file.read().splitlines()
+
 setup(
     name="bustracker",
     version="0.0.1",

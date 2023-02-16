@@ -41,6 +41,7 @@ packaging==22.0
 pluggy==1.0.0
 protobuf==4.21.12
 pydantic==1.10.4
+pyscopg2==66.0.2
 pytest==7.2.0
 python-dotenv==0.21.0
 requests==2.28.1

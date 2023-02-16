@@ -70,7 +70,7 @@ def logout():
 
 
 @login_bp.route('/register', methods=['GET', 'POST'])
-async def register():
+def register():
     """Registration view"""
     register_form = RegisterForm()
     if register_form.validate_on_submit():
@@ -88,7 +88,7 @@ async def register():
         logger.info('New user %s registered', new_user)
 
         # Send a confirmation email to the user
-        await new_user.send_confirmation_email()
+        asyncio.run(new_user.send_confirmation_email())
 
         login_user(new_user, force=True)
         return redirect(url_for('app_bp.index'))
@@ -96,13 +96,13 @@ async def register():
 
 
 @login_bp.route('/reconfirm', methods=['GET', 'POST'])
-async def reconfirm():
+def reconfirm():
     resend_form = ResendConfirmation()
     if resend_form.validate_on_submit():
         email = resend_form.email.data
         user = get_user_by_email(email)
         if user is not None:
-            await user.send_confirmation_email()
+            asyncio.run(user.send_confirmation_email)
             flash('Confirmation email sent')
             return redirect(url_for('app_bp.index'))
         else:
