@@ -102,7 +102,7 @@ def reconfirm():
         email = resend_form.email.data
         user = get_user_by_email(email)
         if user is not None:
-            asyncio.run(user.send_confirmation_email)
+            asyncio.run(user.send_confirmation_email())
             flash('Confirmation email sent')
             return redirect(url_for('app_bp.index'))
         else:
