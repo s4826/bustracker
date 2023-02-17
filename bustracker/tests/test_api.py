@@ -4,6 +4,7 @@ import json
 from collections import OrderedDict
 
 from app.scripts import api
+from app.scripts.constants import OUTBOUND, INBOUND
 
 test_dir = os.path.dirname(__file__)
 
@@ -44,6 +45,21 @@ def test_get_all_route_ids(monkeypatch):
     assert api.get_all_route_ids() == lines
 
 
-def test_build_route_dict():
-    d = api.build_route_dict(57, 1)
+def test_build_route_dict(monkeypatch):
+    def mock_get(url):
+        return MockJsonResponse('77in.json')
+    
+    monkeypatch.setattr(requests, 'get', mock_get)
+
+    d = api.build_route_dict(77, INBOUND)
     assert isinstance(d, OrderedDict)
+
+    with open(os.path.join(test_dir, 'data', '77in_dict'), "r") as route_dict:
+        stops = list(map(lambda s: s.strip(), route_dict.readlines()))
+
+    stop_dict = OrderedDict()
+    for stop in stops:
+        key, value = stop.split(', ')
+        stop_dict[key] = value
+
+    assert stop_dict == d
