@@ -23,3 +23,9 @@ def client(_app):
 @pytest.fixture
 def user():
     return User(email='user@test.com', password='password')
+
+
+@pytest.fixture
+def test_mail_server(_app):
+    return 'http://{}:{}'.format(_app.config['MAIL_SERVER'],
+                                 _app.config['MAIL_API_PORT'])
