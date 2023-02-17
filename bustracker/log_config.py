@@ -1,46 +1,34 @@
 """Logging configurations"""
 import logging
-
 from logging.config import dictConfig
 
 log_config = {
     "version": 1,
     "formatters": {
-        "default": {
-            "format": "%(asctime)s %(levelname)s %(module)s : %(message)s"
-        },
+        "default": {"format": "%(asctime)s %(levelname)s %(module)s : %(message)s"},
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",
-            "formatter": "default"
+            "formatter": "default",
         },
         "debug": {
             "class": "logging.FileHandler",
             "filename": "bustracker/logs/app.debug.log",
-            "formatter": "default"
+            "formatter": "default",
         },
         "error": {
             "class": "logging.FileHandler",
             "filename": "bustracker/logs/app.errors.log",
-            "formatter": "default"
+            "formatter": "default",
         },
     },
     "loggers": {
-        "debug": {
-            "handlers": ["debug"],
-            "level": "DEBUG"
-        },
-        "error": {
-            "handlers": ["error"],
-            "level": "ERROR"
-        }
+        "debug": {"handlers": ["debug"], "level": "DEBUG"},
+        "error": {"handlers": ["error"], "level": "ERROR"},
     },
-    "root": {
-        "level": "DEBUG",
-        "handlers": ["console", "debug"]
-    }
+    "root": {"level": "DEBUG", "handlers": ["console", "debug"]},
 }
 
 dictConfig(log_config)

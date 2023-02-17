@@ -8,7 +8,7 @@ def test_login_route(client):
 
 def test_logout_route(client):
     response = client.get("/logout", follow_redirects=True)
-    assert response.status_code == 200 
+    assert response.status_code == 200
 
 
 def test_index(client):

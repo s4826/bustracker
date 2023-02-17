@@ -1,21 +1,14 @@
 """App factory module"""
 
 # flake8: noqa
-from flask import Flask
 from config import config
-from .extensions import (
-    bootstrap,
-    db,
-    migrate,
-    session,
-    mail,
-    login_manager
-)
+from flask import Flask
 
-from .views import app_bp
+from .extensions import bootstrap, db, login_manager, mail, migrate, session
 from .login.views import login_bp
+from .views import app_bp
 
-login_manager.login_view = 'login_bp.login'
+login_manager.login_view = "login_bp.login"
 
 
 def create_app(config_name):

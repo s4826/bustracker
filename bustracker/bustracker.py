@@ -2,4 +2,4 @@
 
 from app import create_app
 
-app = create_app('postgres_config')
+app = create_app("postgres_config")

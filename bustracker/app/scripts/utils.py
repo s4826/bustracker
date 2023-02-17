@@ -23,7 +23,7 @@ def build_json_request_url(endpoint, filter_dict=None, fields=None):
 
     if fields is not None:
         field_filter = ",".join(fields)
-        url += f'fields[{endpoint[:-1]}]=' + field_filter
+        url += f"fields[{endpoint[:-1]}]=" + field_filter
     return url
 
 
@@ -36,21 +36,23 @@ def add_filters(url, filter_dict):
     :param filter_dict: Dictionary of filter names/values
     """
     # add sorting option if present
-    if 'sort' in filter_dict:
+    if "sort" in filter_dict:
         url += f'sort={filter_dict["sort"]}&'
 
     for key in filter_dict:
-        if 'sort' != key:
-            url += f'filter[{key}]={filter_dict[key]}&'
+        if "sort" != key:
+            url += f"filter[{key}]={filter_dict[key]}&"
     return url
 
 
 def generate_confirmation_email_content(token):
     """Generate confirmation email content based on a confirmation token"""
 
-    link = f'http://localhost:5000/confirm_account/{token}'
-    content = 'Thanks for registering with the bustracker app!\n' + \
-        'Please confirm your email address at the following link.\n\n' + \
-        f'{link}'
+    link = f"http://localhost:5000/confirm_account/{token}"
+    content = (
+        "Thanks for registering with the bustracker app!\n"
+        + "Please confirm your email address at the following link.\n\n"
+        + f"{link}"
+    )
 
     return content
