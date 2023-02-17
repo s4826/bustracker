@@ -4,8 +4,6 @@ import pytest
 from app import db
 from app.models import Stop, User
 
-from .fixtures import _app, _db, user  # noqa: F401
-
 
 @pytest.fixture
 def stop():

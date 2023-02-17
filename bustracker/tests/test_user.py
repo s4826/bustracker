@@ -13,8 +13,6 @@ from itsdangerous import TimedSerializer
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import ConnectionError
 
-from .fixtures import _app, _db, client, test_mail_server, user  # noqa: F401
-
 
 def test_password_verification(user):
     assert not user.verify_password("pass")

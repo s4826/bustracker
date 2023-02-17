@@ -3,8 +3,8 @@ from app import create_app, db
 from app.models import User
 
 
-@pytest.fixture
-def _app(scope="session"):
+@pytest.fixture(scope="session")
+def _app():
     return create_app("testing")
 
 

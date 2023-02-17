@@ -5,8 +5,6 @@ from app.scripts.utils import (
     generate_confirmation_email_content,
 )
 
-from .fixtures import _app, user
-
 
 def test_build_json_request_url():
     request = "routes"

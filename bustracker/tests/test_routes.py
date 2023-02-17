@@ -1,4 +1,4 @@
-from .fixtures import _app, client  # noqa: F401
+"""Route tests"""
 
 
 def test_login_route(client):
