@@ -11,7 +11,6 @@ from flask import (
     flash,
     redirect,
     render_template,
-    request,
     session,
     url_for,
 )
@@ -19,7 +18,7 @@ from flask_login import current_user, login_user, logout_user
 from itsdangerous import TimedSerializer
 from itsdangerous.exc import SignatureExpired
 from log_config import get_logger
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 
 from .forms import LoginForm, RegisterForm, ResendConfirmation
 
@@ -43,7 +42,7 @@ def login():
             user = db.session.query(User).filter_by(email=email).one()
             if user.verify_password(pw):
                 if user.confirmed:
-                    login_user(user, remember=login_form.remember.data, force=True)
+                    login_user(user, remember=remember, force=True)
                     logger.info("%s logged in", current_user)
                     flash("Logged in")
                     return redirect(url_for("app_bp.index"))
