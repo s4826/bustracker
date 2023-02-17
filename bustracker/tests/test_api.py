@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import requests
 from app.scripts import api
-from app.scripts.constants import INBOUND, OUTBOUND
+from app.scripts.constants import INBOUND
 
 test_dir = os.path.dirname(__file__)
 
