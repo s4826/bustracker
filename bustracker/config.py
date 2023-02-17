@@ -38,6 +38,7 @@ class TestConfig(Config):
     MAIL_PASSWORD = config['MAIL_PASSWORD'] 
     MAIL_SERVER = config['MAIL_SERVER'] 
     MAIL_PORT = config['MAIL_PORT'] 
+    MAIL_API_PORT = config['MAIL_API_PORT']
     MAIL_FROM = config['MAIL_FROM'] 
     MAIL_USE_TLS = config['MAIL_USE_TLS']
     MAIL_USE_SSL = config['MAIL_USE_SSL']
