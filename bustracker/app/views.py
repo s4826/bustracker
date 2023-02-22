@@ -1,7 +1,8 @@
 """Main views for route and stop selection"""
 
 from flask import Blueprint, g, render_template, request, session
-from log_config import get_logger
+
+from bustracker.log_config import get_logger
 
 from .forms import DirectionForm, RouteForm, SelectStopForm
 from .scripts import api

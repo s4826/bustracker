@@ -1,8 +1,9 @@
 from datetime import datetime
 
 import pytest
-from app import db
-from app.models import Stop, User
+
+from bustracker.app import db
+from bustracker.app.models import Stop, User
 
 
 @pytest.fixture

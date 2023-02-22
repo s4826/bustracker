@@ -3,8 +3,9 @@ import os
 from collections import OrderedDict
 
 import requests
-from app.scripts import api
-from app.scripts.constants import INBOUND
+
+from bustracker.app.scripts import api
+from bustracker.app.scripts.constants import INBOUND
 
 test_dir = os.path.dirname(__file__)
 

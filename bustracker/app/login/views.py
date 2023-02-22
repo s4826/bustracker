@@ -2,8 +2,6 @@
 
 import asyncio
 
-from app.extensions import db
-from app.models import User
 from flask import (
     Blueprint,
     Markup,
@@ -17,8 +15,11 @@ from flask import (
 from flask_login import current_user, login_user, logout_user
 from itsdangerous import TimedSerializer
 from itsdangerous.exc import SignatureExpired
-from log_config import get_logger
 from sqlalchemy.orm.exc import NoResultFound
+
+from bustracker.app.extensions import db
+from bustracker.app.models import User
+from bustracker.log_config import get_logger
 
 from .forms import LoginForm, RegisterForm, ResendConfirmation
 

@@ -1,5 +1,5 @@
 """Bustracker app, main entry point"""
 
-from app import create_app
+from bustracker.app import create_app
 
-app = create_app("postgres_config")
+app = create_app("default")

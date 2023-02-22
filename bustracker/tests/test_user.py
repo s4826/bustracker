@@ -5,13 +5,14 @@ from functools import reduce
 
 import pytest
 import requests
-from app import db
-from app.models import User
 from flask import session
 from flask_login import current_user, login_user, logout_user
 from itsdangerous import TimedSerializer
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import ConnectionError
+
+from bustracker.app import db
+from bustracker.app.models import User
 
 
 def test_password_verification(user):

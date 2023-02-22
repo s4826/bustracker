@@ -1,5 +1,5 @@
-from app.scripts.constants import JSON_API_PREFIX
-from app.scripts.utils import (
+from bustracker.app.scripts.constants import JSON_API_PREFIX
+from bustracker.app.scripts.utils import (
     add_filters,
     build_json_request_url,
     generate_confirmation_email_content,

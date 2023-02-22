@@ -1,8 +1,9 @@
 """App factory module"""
 
 # flake8: noqa
-from config import config
 from flask import Flask
+
+from bustracker.config import config
 
 from .extensions import bootstrap, db, login_manager, mail, migrate, session
 from .login.views import login_bp

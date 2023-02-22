@@ -1,6 +1,9 @@
 """Logging configurations"""
 import logging
+import os
 from logging.config import dictConfig
+
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
 log_config = {
     "version": 1,
@@ -15,12 +18,12 @@ log_config = {
         },
         "debug": {
             "class": "logging.FileHandler",
-            "filename": "bustracker/logs/app.debug.log",
+            "filename": f"{base_dir}/logs/app.debug.log",
             "formatter": "default",
         },
         "error": {
             "class": "logging.FileHandler",
-            "filename": "bustracker/logs/app.errors.log",
+            "filename": f"{base_dir}/logs/app.errors.log",
             "formatter": "default",
         },
     },

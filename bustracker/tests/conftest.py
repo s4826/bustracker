@@ -1,6 +1,7 @@
 import pytest
-from app import create_app, db
-from app.models import User
+
+from bustracker.app import create_app, db
+from bustracker.app.models import User
 
 
 @pytest.fixture(scope="session")
