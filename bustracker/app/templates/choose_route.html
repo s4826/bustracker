@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap4/form.html" as wtf %}
 {% block title %} {{ super() }}{% endblock %}
 {% block main %}
 <div class=container>
-    {{ wtf.quick_form(route_form) }}
+    {{ wtf.render_form(route_form) }}
 </div>
 {{ super() }}
 {% endblock %}
