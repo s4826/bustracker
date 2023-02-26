@@ -5,6 +5,9 @@ from logging.config import dictConfig
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
+if not os.path.exists(f"{base_dir}/logs"):
+    os.mkdir(f"{base_dir}/logs")
+
 log_config = {
     "version": 1,
     "formatters": {
