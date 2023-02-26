@@ -1,7 +1,7 @@
 {% extends "choose_stop.html" %}
 {% block main %}
 {{ super() }}
-<div class=container>
+<div class="container">
     <p style="font-weight:bold">Arrival Times</p>
 {% for p in predictions %}
     <p class="arrival-time" data-time={{p}}></p>
