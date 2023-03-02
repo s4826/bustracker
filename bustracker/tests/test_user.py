@@ -33,9 +33,8 @@ def test_flask_login(_app, user):
             assert current_user.is_authenticated
 
     with _app.test_request_context():
-        with _app.test_request_context():
-            logout_user()
-            assert not current_user.is_authenticated
+        logout_user()
+        assert not current_user.is_authenticated
 
 
 def test_register_user(_app, _db, client, test_mail_server, caplog):
