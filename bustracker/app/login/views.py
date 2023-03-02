@@ -91,7 +91,10 @@ def register():
         # Send a confirmation email to the user
         asyncio.run(new_user.send_confirmation_email())
 
-        login_user(new_user, force=True)
+        flash(
+            f"A confirmation email was sent to {email}. "
+            + "Please confirm your account to log in."
+        )
         return redirect(url_for("app_bp.index"))
     return render_template("login/register.html", register_form=register_form)
 
