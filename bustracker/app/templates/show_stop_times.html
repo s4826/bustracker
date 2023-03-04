@@ -1,12 +1,20 @@
 {% extends "choose_stop.html" %}
 {% block main %}
 {{ super() }}
-<div class="container">
-    <p style="font-weight:bold">Arrival Times</p>
-{% for p in predictions %}
-    <p class="arrival-time" data-time={{p}}></p>
-{% endfor %}
-</div>
+{% if predictions %}
+    <div class="container">
+        <p style="font-weight:bold">Arrival Times</p>
+    {% for p in predictions %}
+        <p class="arrival-time" data-time={{p}}></p>
+    {% endfor %}
+    </div>
+{% else %}
+    <div class="container">
+        <p style="font-weight:bold">
+            No arrival times available for this route/stop combination.
+        </p>
+    </div>
+{% endif %}
 {% endblock %}
 {% block scripts %}
 {{ super() }}
