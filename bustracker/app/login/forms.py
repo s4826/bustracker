@@ -8,8 +8,14 @@ from wtforms.validators import Email, EqualTo, InputRequired, Length
 class LoginForm(FlaskForm):
     """Login form"""
 
-    email = StringField("Email", validators=[InputRequired()])
-    password = PasswordField("Password", validators=[InputRequired(), Length(8, 50)])
+    email = StringField(
+        "Email", render_kw={"disabled": ""}, validators=[InputRequired()]
+    )
+    password = PasswordField(
+        "Password",
+        render_kw={"disabled": ""},
+        validators=[InputRequired(), Length(8, 50)],
+    )
     remember = BooleanField("Keep me logged in")
     submit = SubmitField("Log In")
 
@@ -17,10 +23,19 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     """Registration form"""
 
-    email = StringField("Email (Username)", validators=[InputRequired(), Email()])
-    password = PasswordField("Password", validators=[InputRequired(), Length(8, 50)])
+    email = StringField(
+        "Email (Username)",
+        render_kw={"disabled": ""},
+        validators=[InputRequired(), Email()],
+    )
+    password = PasswordField(
+        "Password",
+        render_kw={"disabled": ""},
+        validators=[InputRequired(), Length(8, 50)],
+    )
     confirm_password = PasswordField(
         "Confirm Password",
+        render_kw={"disabled": ""},
         validators=[
             InputRequired(),
             Length(8, 50),
