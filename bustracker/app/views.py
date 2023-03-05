@@ -45,12 +45,13 @@ def choose_stop(route_id, direction):
     """Stop selection view"""
     dir_id = directions[direction]
     route_dir_id = str(route_id) + "-" + str(dir_id)
-    try:
+
+    if route_dir_id not in session:
         session[route_dir_id] = api.build_route_dict(route_id, dir_id)
-        g.stop_form.stop_list.choices = [("", "")] + list(session[route_dir_id].items())
         debug_logger.info("Added %s dictionary to session object", route_dir_id)
-    except KeyError:
-        error_logger.exception("%s not in session object", route_dir_id)
+
+    g.stop_form.stop_list.choices = [("", "")] + list(session[route_dir_id].items())
+
     return render_template(
         "choose_stop.html",
         route_form=g.route_form,
