@@ -1,0 +1,10 @@
+# Example environment variables for development. Replace these with the
+# appropriate values or leave them as-is if you don't need email functionality.
+
+MAIL_SERVER="smtp.gmail.com"
+MAIL_PORT="587"
+MAIL_USERNAME="username@gmail.com"
+MAIL_PASSWORD="mail_password"
+MAIL_FROM="username@gmail.com"
+MAIL_USE_TLS=True
+MAIL_USE_SSL=False
