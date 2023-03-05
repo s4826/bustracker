@@ -5,6 +5,7 @@
 # MailHog test server
 MAIL_SERVER=0.0.0.0
 MAIL_PORT=1025
+MAIL_API_PORT=8025
 
 MAIL_USERNAME="test@test.com"
 MAIL_PASSWORD="test"
